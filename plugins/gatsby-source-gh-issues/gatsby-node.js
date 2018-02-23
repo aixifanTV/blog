@@ -22,7 +22,7 @@ exports.sourceNodes = async (
         query: `
             {
               repository(owner: "${username}", name: "${repository}") {
-                issues(first: 100 states: OPEN, orderBy: {field: CREATED_AT, direction: DESC}${after}) {
+                issues(first: 100, states: OPEN, orderBy: {field: CREATED_AT, direction: DESC}${after}) {
                   nodes {
                     number
                     title
@@ -48,7 +48,6 @@ exports.sourceNodes = async (
 
     const { data: { repository: { issues: { nodes, pageInfo } } } } = data
     issues = issues.concat(nodes)
-    console.log(data)
     if (pageInfo.hasNextPage) {
       issues = await fetch(`, after: "${pageInfo.endCursor}"`, issues)
     }
@@ -57,9 +56,9 @@ exports.sourceNodes = async (
 
   const issues = await fetch()
 
-  issues.forEach(async e => {
+  issues.forEach(e => {
     const markdown = matter(e.body)
-    await remark()
+    remark()
       .use(guide)
       .use(html)
       .process(markdown.content, (err, file) => {
