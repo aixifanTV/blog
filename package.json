@@ -1,0 +1,27 @@
+{
+  "name": "blog",
+  "description": "blog",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "crypto": "^1.0.1",
+    "gatsby": "^1.9.158",
+    "gatsby-link": "^1.6.34",
+    "gatsby-plugin-react-helmet": "^2.0.5",
+    "gatsby-plugin-styled-components": "^2.0.7",
+    "github-markdown-css": "^2.10.0",
+    "gray-matter": "^3.1.1",
+    "react-helmet": "^5.2.0",
+    "remark": "^9.0.0",
+    "remark-html": "^7.0.0",
+    "remark-preset-lint-markdown-style-guide": "^2.1.1",
+    "styled-components": "^3.1.6",
+    "vfile-reporter": "^4.0.0"
+  }
+}
