@@ -63,7 +63,7 @@ exports.sourceNodes = async (
       .use(html)
       .process(markdown.content, (err, file) => {
         const slug = markdown.data.slug || e.number
-        markdown.data.slug = `/${repository}/${slug}/`
+        markdown.data.slug = `post/${slug}`
         e.frontmatter = markdown.data
         e.body = String(file)
         console.error(report(err || file))

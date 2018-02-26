@@ -1,8 +1,12 @@
 const path = require('path')
 
-exports.createPages = async ({ boundActionCreators, graphql }) => {
+exports.createPages = ({ boundActionCreators, graphql }) => {
   const { createPage } = boundActionCreators
-  const templates = path.resolve('src/templates/index.jsx')
+  const pageTmpl = path.resolve('src/templates/page.jsx')
+  const postTmpl = path.resolve('src/templates/post.jsx')
+  const aboutTmpl = path.resolve('src/templates/about.jsx')
+  const archivesTmpl = path.resolve('src/templates/archives.jsx')
+  const tagsTmpl = path.resolve('src/templates/tags.jsx')
 
   return graphql(
     `
@@ -30,12 +34,33 @@ exports.createPages = async ({ boundActionCreators, graphql }) => {
     if (result.errors) {
       console.log(result.errors)
     }
+
     result.data.issues.nodes.forEach(e => {
       createPage({
-        path: e.frontmatter.slug,
-        component: templates,
+        path: `/blog/${e.frontmatter.slug}`,
+        component: postTmpl,
         context: e
       })
+    })
+
+    createPage({
+      path: `/`,
+      component: pageTmpl
+    })
+
+    createPage({
+      path: `/blog/archives`,
+      component: archivesTmpl
+    })
+
+    createPage({
+      path: `/blog/tags`,
+      component: tagsTmpl
+    })
+
+    createPage({
+      path: `/blog/about`,
+      component: aboutTmpl
     })
   })
 }

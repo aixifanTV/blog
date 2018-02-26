@@ -1,6 +1,8 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import { injectGlobal } from 'styled-components'
+import Container from '../components/Container'
+import Nav from '../components/Nav'
 
 injectGlobal`
   html {
@@ -12,9 +14,6 @@ injectGlobal`
 `
 
 export default class extends React.Component {
-  constructor() {
-    super()
-  }
   render() {
     const { children, data: { site: { siteMetadata } } } = this.props
     return (
@@ -23,7 +22,10 @@ export default class extends React.Component {
           title={siteMetadata.title}
           meta={[{ name: 'description', content: siteMetadata.description }]}
         />
-        {children()}
+        <Container>
+          <Nav />
+          {children()}
+        </Container>
       </div>
     )
   }
