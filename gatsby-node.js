@@ -7,6 +7,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
   const archivesTmpl = path.resolve('src/templates/archives.jsx')
   const tagsTmpl = path.resolve('src/templates/tags.jsx')
   const aboutTmpl = path.resolve('src/templates/about.jsx')
+  const notfoundTmpl = path.resolve('src/templates/404.jsx')
 
   return graphql(
     `
@@ -75,5 +76,25 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
       path: `/blog/about`,
       component: aboutTmpl
     })
+
+    createPage({
+      path: '404.html',
+      component: notfoundTmpl
+    })
   })
+}
+
+exports.modifyWebpackConfig = ({ config, stage }) => {
+  config.loader('file-loader', {
+    query: {
+      name: `blog/static/[name].[hash:8].[ext]`
+    }
+  })
+  config.loader(`url-loader`, {
+    query: {
+      name: `blog/static/[name].[hash:8].[ext]`
+    }
+  })
+
+  return config
 }
