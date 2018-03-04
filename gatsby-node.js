@@ -4,9 +4,9 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
   const { createPage } = boundActionCreators
   const pageTmpl = path.resolve('src/templates/page.jsx')
   const postTmpl = path.resolve('src/templates/post.jsx')
-  const aboutTmpl = path.resolve('src/templates/about.jsx')
   const archivesTmpl = path.resolve('src/templates/archives.jsx')
   const tagsTmpl = path.resolve('src/templates/tags.jsx')
+  const aboutTmpl = path.resolve('src/templates/about.jsx')
 
   return graphql(
     `
@@ -35,6 +35,22 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
       console.log(result.errors)
     }
 
+    const all = result.data.issues.nodes.length
+    const show = 5
+    const page = Math.ceil(all / show)
+    for (let current = 1; current <= all; current++) {
+      createPage({
+        path: current === 1 ? `/` : `/blog/page/${current}`,
+        component: pageTmpl,
+        context: {
+          show,
+          page,
+          current,
+          nodes: result.data.issues.nodes.slice(current * show - show, current * show)
+        }
+      })
+    }
+
     result.data.issues.nodes.forEach(e => {
       createPage({
         path: `/blog/${e.frontmatter.slug}`,
@@ -44,18 +60,15 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     })
 
     createPage({
-      path: `/`,
-      component: pageTmpl
-    })
-
-    createPage({
       path: `/blog/archives`,
-      component: archivesTmpl
+      component: archivesTmpl,
+      context: result.data.issues
     })
 
     createPage({
       path: `/blog/tags`,
-      component: tagsTmpl
+      component: tagsTmpl,
+      context: result.data.issues
     })
 
     createPage({

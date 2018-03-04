@@ -13,22 +13,20 @@ injectGlobal`
   }
 `
 
-export default class extends React.Component {
-  render() {
-    const { children, data: { site: { siteMetadata } } } = this.props
-    return (
-      <div>
-        <Helmet
-          title={siteMetadata.title}
-          meta={[{ name: 'description', content: siteMetadata.description }]}
-        />
-        <Container>
-          <Nav />
-          {children()}
-        </Container>
-      </div>
-    )
-  }
+export default ({ children, data }) => {
+  const { site: { siteMetadata } } = data
+  return (
+    <div>
+      <Helmet
+        title={siteMetadata.title}
+        meta={[{ name: 'description', content: siteMetadata.description }]}
+      />
+      <Container>
+        <Nav />
+        {children()}
+      </Container>
+    </div>
+  )
 }
 
 export const query = graphql`

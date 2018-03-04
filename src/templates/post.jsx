@@ -1,23 +1,23 @@
 import React from 'react'
 import Helmet from 'react-helmet'
+import axios from 'axios'
 import 'github-markdown-css/github-markdown.css'
 
 export default class extends React.Component {
-  componentDidMount() {}
+  componentDidMount() {
+    // axios('https://api.github.com/graphql')
+  }
   render() {
-    const { pathContext } = this.props
+    const { pathContext: issue } = this.props
     return (
       <div>
-        <Helmet
-          title={pathContext.title}
-          meta={[{ name: 'description', content: pathContext.title }]}
-        />
-        <h1>{pathContext.title}</h1>
-        <p>{pathContext.labels.nodes.map(label => `#${label.name} `)}</p>
-        <div
-          className="markdown-body"
-          dangerouslySetInnerHTML={{ __html: pathContext.body }}
-        />
+        <Helmet title={issue.title} meta={[{ name: 'description', content: issue.title }]} />
+        <h1>{issue.title}</h1>
+        <p>
+          {issue.createdAt}
+          {issue.labels.nodes.map(label => ` #${label.name}`)}
+        </p>
+        <div className="markdown-body" dangerouslySetInnerHTML={{ __html: issue.body }} />
       </div>
     )
   }

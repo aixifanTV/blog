@@ -6,10 +6,7 @@ const guide = require('remark-preset-lint-markdown-style-guide')
 const html = require('remark-html')
 const report = require('vfile-reporter')
 
-exports.sourceNodes = async (
-  { boundActionCreators },
-  { token, username, repository }
-) => {
+exports.sourceNodes = async ({ boundActionCreators }, { token, username, repository }) => {
   const { createNode } = boundActionCreators
 
   const fetch = async (after = '', issues = []) => {
@@ -62,8 +59,13 @@ exports.sourceNodes = async (
       .use(guide)
       .use(html)
       .process(markdown.content, (err, file) => {
+        const createdAt = new Date(e.createdAt)
         const slug = markdown.data.slug || e.number
+        const year = createdAt.getFullYear()
+        const month = createdAt.getMonth() + 1
+        const date = createdAt.getDate()
         markdown.data.slug = `post/${slug}`
+        e.createdAt = `${year}-${month}-${date}`
         e.frontmatter = markdown.data
         e.body = String(file)
         console.error(report(err || file))
