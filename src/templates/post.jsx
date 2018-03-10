@@ -2,6 +2,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import axios from 'axios'
 import 'github-markdown-css/github-markdown.css'
+import 'prismjs/themes/prism.css'
 
 export default class extends React.Component {
   componentDidMount() {

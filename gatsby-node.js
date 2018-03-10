@@ -84,7 +84,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
   })
 }
 
-exports.modifyWebpackConfig = ({ config, stage }) => {
+exports.modifyWebpackConfig = ({ config }) => {
   config.loader('file-loader', {
     query: {
       name: `blog/static/[name].[hash:8].[ext]`

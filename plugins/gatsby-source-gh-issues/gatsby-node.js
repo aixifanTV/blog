@@ -1,10 +1,10 @@
 const crypto = require('crypto')
 const axios = require('axios')
 const matter = require('gray-matter')
-const remark = require('remark')
-const guide = require('remark-preset-lint-markdown-style-guide')
-const html = require('remark-html')
-const report = require('vfile-reporter')
+const markdown = require('markdown-it')
+const prism = require('markdown-it-prism')
+const checkbox = require('markdown-it-task-checkbox')
+const emoji = require('markdown-it-emoji')
 
 exports.sourceNodes = async ({ boundActionCreators }, { token, username, repository }) => {
   const { createNode } = boundActionCreators
@@ -54,22 +54,22 @@ exports.sourceNodes = async ({ boundActionCreators }, { token, username, reposit
   const issues = await fetch()
 
   issues.forEach(e => {
-    const markdown = matter(e.body)
-    remark()
-      .use(guide)
-      .use(html)
-      .process(markdown.content, (err, file) => {
-        const createdAt = new Date(e.createdAt)
-        const slug = markdown.data.slug || e.number
-        const year = createdAt.getFullYear()
-        const month = createdAt.getMonth() + 1
-        const date = createdAt.getDate()
-        markdown.data.slug = `post/${slug}`
-        e.createdAt = `${year}-${month}-${date}`
-        e.frontmatter = markdown.data
-        e.body = String(file)
-        console.error(report(err || file))
-      })
+    const createdAt = new Date(e.createdAt)
+    const year = createdAt.getFullYear()
+    const month = createdAt.getMonth() + 1
+    const date = createdAt.getDate()
+    const mdparse = matter(e.body)
+    const md2html = markdown()
+      .use(prism)
+      .use(checkbox)
+      .use(emoji)
+
+    e.frontmatter = {
+      ...mdparse.data,
+      slug: `post/${mdparse.data.slug || e.number}`
+    }
+    e.createdAt = `${year}-${month}-${date}`
+    e.body = md2html.render(mdparse.content)
   })
 
   createNode({
